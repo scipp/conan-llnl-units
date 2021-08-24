@@ -21,8 +21,12 @@ class UnitsConan(ConanFile):
     topics = ("units", "dimensions", "quantities", "physical-units",
               "dimensional-analysis", "run-time")
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False], "namespace": "ANY"}
-    default_options = {"shared": False, "namespace": None}
+    options = {"shared": [True, False],
+               "base_type": ["uint32_t", "uint64_t"],
+               "namespace": "ANY"}
+    default_options = {"shared": False,
+                       "base_type": "uint32_t",
+                       "namespace": None}
     generators = "cmake"
 
     def source(self):
@@ -38,8 +42,13 @@ conan_basic_setup()""")
     def build(self):
         cmake = CMake(self)
         units_namespace = self.options.get_safe("namespace")
+        cmake.definitions["UNITS_ENABLE_TESTS"] = "OFF"
+        cmake.definitions["UNITS_BASE_TYPE"] = self.options.base_type
         if units_namespace:
             cmake.definitions["UNITS_NAMESPACE"] = units_namespace
+        if self.options["shared"]:
+            cmake.definitions["UNITS_BUILD_SHARED_LIBRARY"] = "ON"
+            cmake.definitions["UNITS_BUILD_STATIC_LIBRARY"] = "OFF"
         # The library uses C++14, but we want to set the namespace
         # to llnl::units which requires C++17.
         cmake.definitions["CMAKE_CXX_STANDARD"] = "17"
