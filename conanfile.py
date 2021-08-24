@@ -10,7 +10,7 @@ CMAKE_PROJECT_STR = """project(
 
 class UnitsConan(ConanFile):
     name = "LLNL-Units"
-    version = "0.5.0-dev1"
+    version = "0.5.0"
     license = "BSD-3"
     url = "https://github.com/scipp/conan-llnl-units"
     homepage = "https://units.readthedocs.io"
