@@ -66,7 +66,8 @@ conan_basic_setup()""")
     def package_info(self):
         self.cpp_info.libs = ["units"]
         units_namespace = self.options.get_safe("namespace")
+        self.cpp_info.defines = [
+            f"UNITS_BASE_TYPE={self.options.base_type}"
+        ]
         if units_namespace:
-            self.cpp_info.defines = [
-              f"UNITS_NAMESPACE={units_namespace}"
-              ]
+            self.cpp_info.defines.append(f"UNITS_NAMESPACE={units_namespace}")
