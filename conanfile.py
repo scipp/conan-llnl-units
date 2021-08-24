@@ -38,11 +38,11 @@ conan_basic_setup()""")
     def build(self):
         cmake = CMake(self)
         units_namespace = self.options.get_safe("namespace")
+        if units_namespace:
+            cmake.definitions["UNITS_NAMESPACE"] = units_namespace
         # The library uses C++14, but we want to set the namespace
         # to llnl::units which requires C++17.
         cmake.definitions["CMAKE_CXX_STANDARD"] = "17"
-        if units_namespace:
-            cmake.definitions["UNITS_NAMESPACE"] = units_namespace
         cmake.configure(source_folder="units")
         cmake.build(target="units")
 
@@ -56,3 +56,8 @@ conan_basic_setup()""")
 
     def package_info(self):
         self.cpp_info.libs = ["units"]
+        units_namespace = self.options.get_safe("namespace")
+        if units_namespace:
+            self.cpp_info.defines = [
+              f"UNITS_NAMESPACE={units_namespace}"
+              ]
