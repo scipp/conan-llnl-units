@@ -22,9 +22,11 @@ class UnitsConan(ConanFile):
               "dimensional-analysis", "run-time")
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False],
+               "fPIC": [True, False],
                "base_type": ["uint32_t", "uint64_t"],
                "namespace": "ANY"}
     default_options = {"shared": False,
+                       "fPIC": True,
                        "base_type": "uint32_t",
                        "namespace": None}
     generators = "cmake"
