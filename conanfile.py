@@ -1,4 +1,5 @@
 from conans import ConanFile, CMake, tools
+import os
 
 
 CMAKE_PROJECT_STR = """project(
@@ -35,9 +36,13 @@ class UnitsConan(ConanFile):
         git = tools.Git("units")
         git.clone("https://github.com/SimonHeybrock/units.git")
 
+        cmake_project_str = (CMAKE_PROJECT_STR.replace("\n", os.linesep)
+                             if self.settings.os == "Windows" else
+                             CMAKE_PROJECT_STR)
+
         tools.replace_in_file("units/CMakeLists.txt",
-                              CMAKE_PROJECT_STR,
-                              CMAKE_PROJECT_STR + """
+                              cmake_project_str,
+                              cmake_project_str + """
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()""")
 
